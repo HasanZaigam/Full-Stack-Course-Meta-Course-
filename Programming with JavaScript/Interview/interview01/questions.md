@@ -1,31 +1,36 @@
-Perfect! I can create a **single Markdown (`.md`) file** containing **all your Day 1 interview practice questions**—both coding and technical questions—ready to push to GitHub. You can later replicate this format for other days/topics.
-
-Here’s the full `.md` content:
 
 ````markdown
-# Day 1: Mixed Interview Practice (Frontend + Full Stack JS)
+# 📌 Day 01: Interview Practice (Frontend + Full Stack JS)
 
-🕒 **Total Duration:** ~90–120 mins / session
+🕒 **Total Duration:** ~90–120 mins/session  
+🎯 **Focus:** JavaScript, React/Next.js, Node.js, MERN stack  
+````
+
 
 ---
 
 ## 👨‍💻 Round 1: Coding Questions
 
-### 1. Easy
-**Problem:** Write a function `isPalindrome(str)` that returns `true` if the string is a palindrome and `false` otherwise. Ignore casing and spaces.
+### 1️⃣ Easy
+**Problem:** Palindrome Checker  
+Write a function `isPalindrome(str)` that returns `true` if the string is a palindrome and `false` otherwise. Ignore casing and spaces.
 
 ```javascript
 function isPalindrome(str) {
     const cleanStr = str.replace(/\s+/g, '').toLowerCase();
     return cleanStr === cleanStr.split('').reverse().join('');
 }
+
+// Example
+console.log(isPalindrome("Race car")); // true
 ````
 
 ---
 
-### 2. Medium
+### 2️⃣ Medium
 
-**Problem:** Implement a debounce function in JavaScript. Show how you’d use it for a search input box.
+**Problem:** Implement Debounce Function
+Create a debounce function in JavaScript. Show how it would work for a search input.
 
 ```javascript
 function debounce(fn, delay) {
@@ -36,15 +41,16 @@ function debounce(fn, delay) {
     };
 }
 
-// Example usage:
+// Usage example
 const handleSearch = debounce((value) => console.log("Searching:", value), 300);
 ```
 
 ---
 
-### 3. Medium
+### 3️⃣ Medium
 
-**Problem:** Given an array of numbers, implement `groupBy` function to group elements based on a callback.
+**Problem:** Group Elements by Callback
+Given an array, implement a `groupBy` function to group elements based on a callback.
 
 ```javascript
 function groupBy(array, callback) {
@@ -58,14 +64,15 @@ function groupBy(array, callback) {
 
 // Example
 groupBy([6.1, 4.2, 6.3], Math.floor)
-// => { '4': [4.2], '6': [6.1, 6.3] }
+// Output: { '4': [4.2], '6': [6.1, 6.3] }
 ```
 
 ---
 
-### 4. Optional (Advanced)
+### 4️⃣ Optional (Advanced)
 
-**Problem:** Write a function `deepClone(obj)` that deeply clones a nested object (without using `structuredClone` or libraries).
+**Problem:** Deep Clone Object
+Write a function `deepClone(obj)` that deeply clones a nested object without using libraries.
 
 ```javascript
 function deepClone(obj) {
@@ -79,41 +86,30 @@ function deepClone(obj) {
     }
     return clone;
 }
+
+// Example
+const original = { a: 1, b: { c: 2 } };
+const copy = deepClone(original);
 ```
 
 ---
 
-## 🧠 Round 2: Technical Questions
+## 🧠 Round 2: Technical & Concept Questions
 
-1. Explain the difference between **microtasks** and **macrotasks** in the event loop.
-2. What happens during **variable hoisting** with `var`, `let`, and `const`?
-3. Explain **closures** in your own words with a practical example.
-4. How is `this` handled differently in **arrow functions** vs **regular functions**?
-5. How would you **prevent runtime errors** in a large JS codebase?
-6. Difference between **shallow copy** and **deep copy** in objects?
-7. How does **prototypal inheritance** work in JS?
-8. What are **rest** and **spread operators**, with examples?
-9. Explain **debouncing** and **throttling**, and when to use each.
-10. How does `JSON.stringify()` and `JSON.parse()` help in working with APIs?
-11. Advantages of using **modules** (`import/export`) in ES6.
-12. Difference between **syntax, runtime, and logical errors**.
-13. Explain **for...in** vs **for...of** loops and when to use each.
-14. How does **optional chaining (?.)** help write safer code?
-15. How would you **unit test a function** in JS using Jest?
-
----
-
-## ✅ How to Use This File
-
-1. Open in VSCode / GitHub → Readable Markdown.
-2. Solve coding questions in **`code blocks`** or in your local editor.
-3. Answer technical questions in comments or another markdown file for your notes.
-4. Repeat daily with new sets for continuous improvement.
+1. **Event Loop:** Difference between **microtasks** and **macrotasks**.
+2. **Hoisting:** What happens with `var`, `let`, and `const`?
+3. **Closures:** Explain with a practical example.
+4. **This Keyword:** Differences in **arrow functions** vs **regular functions**.
+5. **Error Prevention:** How would you prevent runtime errors in a large JS codebase?
+6. **Copying Objects:** Difference between **shallow copy** and **deep copy**.
+7. **Prototypes:** How does **prototypal inheritance** work?
+8. **Spread & Rest:** Explain and give examples.
+9. **Performance:** Explain **debouncing** vs **throttling** and use cases.
+10. **JSON Handling:** How do `JSON.stringify()` and `JSON.parse()` help with APIs?
+11. **Modules:** Advantages of ES6 `import/export`.
+12. **Errors:** Difference between **syntax**, **runtime**, and **logical** errors.
+13. **Loops:** `for...in` vs `for...of` — usage and differences.
+14. **Optional Chaining:** How `?.` helps write safer code.
+15. **Testing:** How would you unit test a function using **Jest**?
 
 ---
-
-```
-
----
-
-
