@@ -32,3 +32,35 @@ const AdminDashboardSearchQuery = ({fetchResults}) => {
 }
 
 export default AdminDashboardSearchQuery
+
+
+
+
+// const [results, setResults] = useState([]);
+
+//   // Simulated API call (you can replace this with real API)
+//   const fetchResults = (query) => {
+//     console.log("Fetching results for:", query);
+
+//     if (!query) {
+//       setResults([]);
+//       return;
+//     }
+
+//     // Mock search data (like you'd get from a backend)
+//     const allProducts = [
+//       "iPhone 16 Pro",
+//       "Samsung Galaxy S24",
+//       "MacBook Air M3",
+//       "Dell XPS 13",
+//       "Asus ZenBook OLED",
+//       "Sony WH-1000XM5 Headphones",
+//       "Apple Watch Series 9",
+//     ];
+
+//     // Filter products that match the query
+//     const filtered = allProducts.filter((item) =>
+//       item.toLowerCase().includes(query.toLowerCase())
+//     );
+
+//     setResults(filtered);
