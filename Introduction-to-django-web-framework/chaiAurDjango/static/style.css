@@ -1,0 +1,11 @@
+/* Use element selectors so <body> and <h1> are styled */
+body{
+    color: aliceblue;
+    background-color: rgb(0, 0, 51);
+}
+
+h1{
+    color: antiquewhite;
+    font-size: larger;
+    font-family: 'Courier New', Courier, monospace;
+}
