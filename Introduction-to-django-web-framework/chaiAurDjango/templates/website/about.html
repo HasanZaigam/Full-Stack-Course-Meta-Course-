@@ -1,17 +1,9 @@
-{% load static %}
-<!DOCTYPE html>
+ {% extends "layout.html" %}
 
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Chai aur Django About page </title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{% static 'style.css' %}">
-    </head>
-    <body>
-        <h1>Chai Aur Django About</h1>
-        <script src="" async defer></script>
-    </body>
-</html>
+ {% block title %}
+ chai and Django | About
+ {% endblock %}
+
+ {% block content %}
+ <h1>chai and Django | About us page </h1>
+ {% endblock %}
