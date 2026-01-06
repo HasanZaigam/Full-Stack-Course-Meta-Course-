@@ -9,3 +9,4 @@ def about(request):
 
 def contact(request):
      return render(request, 'website/contact.html')
+

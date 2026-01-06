@@ -1,7 +1,7 @@
 /* Use element selectors so <body> and <h1> are styled */
 body{
-    color: aliceblue;
-    background-color: rgb(0, 0, 51);
+    color: rgb(30, 122, 202);
+    background-color: rgb(107, 107, 243);
 }
 
 h1{
