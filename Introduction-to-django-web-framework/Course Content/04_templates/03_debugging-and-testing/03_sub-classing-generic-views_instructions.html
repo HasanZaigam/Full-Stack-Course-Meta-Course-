@@ -1,0 +1,564 @@
+<meta charset="utf-8"/>
+<co-content>
+ <p variant="body1">
+  In this reading, you’ll learn about the
+  <var>
+   class_based
+  </var>
+  generic views.
+ </p>
+ <p variant="body1">
+  You can implement the view layer with function or class-based views in a Django application. You declare a class by extending the
+  <var>
+   django.views.View
+  </var>
+  class and define
+  <var>
+   get()
+  </var>
+  and
+  <var>
+   post()
+  </var>
+  methods inside it to handle the HTTP requests. The URL pattern connects the path to the class with the
+  <var>
+   as_view()
+  </var>
+  method of the View class.
+ </p>
+ <p variant="body1">
+  A quick example of class view:
+ </p>
+ <pre language="python">from django.views import View   
+class NewView(View):   
+    def get(self, request):   
+        # View logic will place here   
+        return HttpResponse('response') </pre>
+ <p>
+  The URL pattern in
+  <var>
+   urls.py
+  </var>
+  is updated as below:
+ </p>
+ <pre language="python">#urls.py 
+from myapp.views import NewView   
+urlpatterns = [   
+    path('about/', NewView.as_view()),   
+]  </pre>
+ <p variant="body1">
+  Django provides class-based generic views to make the development process much easier and faster. In this reading, you’ll discover how the generic views are implemented.
+ </p>
+ <p variant="body1">
+  The most frequently used generic views are:
+ </p>
+ <ul bullettype="bullets">
+  <li aria-level="1" aria-posinset="1">
+   <p>
+    TemplateView
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="2">
+   <p>
+    CreateView
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="1">
+   <p>
+    ListView
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="2">
+   <p>
+    DetailView
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="3">
+   <p>
+    UpdateView
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="4">
+   <p>
+    DeleteView
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="5">
+   <p>
+    LoginView
+   </p>
+  </li>
+ </ul>
+ <h2 level="2" variant="h2semibold">
+  Difference between Function View and generic view
+ </h2>
+ <p variant="body1">
+  Let's take a simple example of rendering a Hello world template. You should render the template as the HTTP response – the return value of the function. The view function for this purpose would be as follows:
+ </p>
+ <pre language="python">from django.shortcuts import render 
+from django.http import HttpResponse 
+def index(request): 
+    template = loader.get_template('myapp/index.html') 
+    context={} 
+    return HttpResponse(template.render(context, request)) </pre>
+ <p variant="body1">
+  As you may have already learned, the app package folder exists inside the project's outer container folder. The
+  <var>
+   myapp
+  </var>
+  app is created in the Django project named
+  <var>
+   myproject
+  </var>
+  .
+ </p>
+ <p variant="body1">
+  In the
+  <var>
+   myapp/urls.py
+  </var>
+  , define the URL pattern:
+ </p>
+ <pre language="python">path('/', views.index, name='index') </pre>
+ <p>
+  You can include the URL definitions of
+  <var>
+   myapp
+  </var>
+  in the project's URL configuration:
+ </p>
+ <pre language="python">urlpatterns = [ 
+    . . . , 
+    path('myapp/', include('myapp.urls')) 
+]   </pre>
+ <p>
+  Use a
+  <var>
+   TemplateView
+  </var>
+  class instead. Simply define a class extending it and set the
+  <var>
+   template_name
+  </var>
+  attribute.
+ </p>
+ <pre language="python">from django.views.generic.base import TemplateView 
+
+class IndexView(TemplateView): 
+    template_name = 'index.html' </pre>
+ <p>
+  The corresponding URL pattern should incorporate this:
+ </p>
+ <pre language="python">path('/', IndexView.as_view(), name='index') </pre>
+ <h2 level="2" variant="h2semibold">
+  Advantage of function-based views
+ </h2>
+ <ul bullettype="bullets">
+  <li aria-level="1" aria-posinset="1">
+   <p>
+    Simple to implement.
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="1">
+   <p>
+    Easy to read.
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="2">
+   <p>
+    Explicit code flow.
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="3">
+   <p>
+    Straightforward usage of decorators.
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="4">
+   <p>
+    good for one-off or specialized functionality.
+   </p>
+  </li>
+ </ul>
+ <h2 level="2" variant="h2semibold">
+  Disadvantages of function-based views
+ </h2>
+ <ul bullettype="bullets">
+  <li aria-level="1" aria-posinset="1">
+   <p>
+    Hard to extend and reuse the code.
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="2">
+   <p>
+    Handling of HTTP methods via conditional branching.
+   </p>
+  </li>
+ </ul>
+ <h2 level="2" variant="h2semibold">
+  Advantages of Class-based views
+ </h2>
+ <ul bullettype="bullets">
+  <li aria-level="1" aria-posinset="3">
+   <p>
+    Code reusability.
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="4">
+   <p>
+    DRY — Using CBVs help to reduce code duplication.
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="1">
+   <p>
+    Code can be extended to include more functionalities.
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="2">
+   <p>
+    class with different methods for each http request instead of conditional branching statements inside a single function-based view.
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="3">
+   <p>
+    Built-in generic class-based views.
+   </p>
+  </li>
+ </ul>
+ <h2 level="2" variant="h2semibold">
+  Disadvantages of Class-based views
+ </h2>
+ <ul bullettype="bullets">
+  <li aria-level="1" aria-posinset="4">
+   <p>
+    Harder to read.
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="1">
+   <p>
+    Implicit code flow.
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="2">
+   <p>
+    Use of view decorators require extra import or method override.
+   </p>
+  </li>
+ </ul>
+ <h2 level="2" variant="h2semibold">
+  Requirements of a generic view
+ </h2>
+ <ul bullettype="bullets">
+  <li aria-level="1" aria-posinset="3">
+   <p>
+    If the view needs a model to be processed, it should be set as the value of model property of the view.
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="1">
+   <p>
+    Each type of view looks for a template name with
+    <var>
+     modelname
+    </var>
+    suffixed by the type of generic view. For example, for a list view processing employee model, Django tries to find
+    <var>
+     employee_list.html
+    </var>
+    .
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="2">
+   <p>
+    The generic view is mapped with the URL with
+    <var>
+     as_view()
+    </var>
+    method of the View class.
+   </p>
+  </li>
+ </ul>
+ <p variant="body1">
+  Let's now build a subclass for each of the respective generic view classes to perform CRUD operations on the Employee model:
+ </p>
+ <pre language="python">class Employee(models.Model):   
+    name = models.CharField(max_length=100)   
+    email = models.EmailField()   
+    contact = models.CharField(max_length=15)   
+    class Meta:   
+        db_table = "Employee" </pre>
+ <h2 level="2" variant="h2semibold">
+  CreateView
+ </h2>
+ <p variant="body1">
+  The
+  <var>
+   CreateView
+  </var>
+  class automates the creation of a new instance of the model. To provide a create view, use the sub-class of
+  <var>
+   CreateView
+  </var>
+  :
+ </p>
+ <pre language="python">from django.views.generic.edit import CreateView   
+
+class EmployeeCreate(CreateView):   
+    model = Employee    
+    fields = '__all__' 
+    success_url = "/employees/success/" </pre>
+ <p>
+  A model form based on the model structure is created by this view and passed to the
+  <var>
+   employeeCreate.html
+  </var>
+  template:
+ </p>
+ <pre language="python">&lt;form method="post"&gt; 
+{% csrf_token %} 
+&lt;table&gt; 
+    {{ form.as_table }} 
+&lt;/table&gt; 
+    &lt;input type="submit" value="Save"&gt; 
+&lt;/form&gt; </pre>
+ <p>
+  The URL path is updated by mapping the
+  <var>
+   "create/"
+  </var>
+  path to the
+  <var>
+   as_view()
+  </var>
+  method of this class:
+ </p>
+ <pre language="python">from .views import EmployeeCreate 
+urlpatterns = [ 
+    . . . 
+    path('create/', EmployeeCreate.as_view(), name = 'EmployeeCreate')  , 
+] </pre>
+ <p>
+  When the client visits this URL, they are presented with the form. The user fills and submits the employee details, which are saved in the Employee table.
+ </p>
+ <h2 level="2" variant="h2semibold">
+  ListView
+ </h2>
+ <p variant="body1">
+  Django's
+  <var>
+   django.views.generic.list
+  </var>
+  module contains the definition of
+  <var>
+   ListView
+  </var>
+  class. Write its sub-class to render the list of model objects.
+ </p>
+ <p variant="body1">
+  The
+  <var>
+   EmployeeList
+  </var>
+  class is similar to the
+  <var>
+   CreateView
+  </var>
+  sub-class except its base class.
+ </p>
+ <pre language="python">from django.views.generic.list import ListView  
+class EmployeeList(ListView):   
+    model = Employee   
+    success_url = "/employees/success/" </pre>
+ <p>
+  The template required for this view must be named
+  <var>
+   employee_list.html
+  </var>
+  . Django sends the model object in its context. Using the DTL loop syntax, you can display the list of employees:
+ </p>
+ <pre language="python">&lt;ul&gt;   
+        {% for object in object_list %}   
+        &lt;li&gt;Name: {{ object.name }}&lt;/li&gt;   
+        &lt;li&gt;Email: {{ object.email }}&lt;/li&gt;   
+        &lt;li&gt;contact: {{ object.contact }}&lt;/li&gt;  
+        &lt;br/&gt; 
+        {% endfor %}   
+&lt;/ul&gt; </pre>
+ <p variant="body1">
+  If the user visits
+  <a href="http://localhost/8000/employees/list" title="">
+   <u>
+    http://localhost:/8000/employees/list
+   </u>
+  </a>
+  , the browser lists all the rows in the employee table.
+ </p>
+ <h2 level="2" variant="h2semibold">
+  DetailView
+ </h2>
+ <p variant="body1">
+  The generic DetailView is found in the
+  <var>
+   django.views.generic.detail
+  </var>
+  module. Now, create its sub-class,
+  <var>
+   EmployeeDetail
+  </var>
+  (much the same way as
+  <var>
+   EmployeeList
+  </var>
+  ). Note that this view shows the details of an object whose primary key is passed as an argument in the URL. So, add the following path in the app's URL pattern:
+ </p>
+ <pre language="python">path('show/&lt;int:pk&gt;', EmployeeDetail.as_view(), name = 'EmployeeDetail') </pre>
+ <p>
+  Again, the View object fetches the model instance and passes it as a context to the
+  <var>
+   employee_detail.html
+  </var>
+  template, which displays its attributes with template syntax as follows:
+ </p>
+ <pre language="python">&lt;h1&gt;Name : {{object.name}}&lt;/h1&gt;   
+
+    &lt;p&gt;Email : {{ object.email }}&lt;/p&gt;   
+    &lt;p&gt;Contact : {{ object.contact }}&lt;/p&gt; </pre>
+ <p variant="body1">
+  Assuming the URL visited is
+  <var>
+   /employees/1
+  </var>
+  , the Employee record with primary key=1 will be displayed.
+ </p>
+ <h2 level="2" variant="h2semibold">
+  UpdateView
+ </h2>
+ <p variant="body1">
+  This is another generic view, defined in
+  <var>
+   django.views.generic.edit
+  </var>
+  module. It renders a form in which the new values of the model attributes can be submitted. Set the fields attribute to
+  <var>
+   '__all__'
+  </var>
+  or to a list of updatable fields.
+ </p>
+ <pre language="python">from django.views.generic.edit import UpdateView  
+class EmployeeUpdate(UpdateView):   
+    model = Employee   
+    fields = '__all__'   
+    success_url = "/employees/success/" </pre>
+ <p>
+  Since this view is intended to update the data of a given model instance, its URL path must be configured accordingly:
+ </p>
+ <pre language="python">path('update/&lt;int:pk&gt;', EmployeeUpdate.as_view(), name = 'EmployeeUpdate') </pre>
+ <p variant="body1">
+  The example URL that invokes this view is
+  <var>
+   /employees/1
+  </var>
+  .
+ </p>
+ <p variant="body1">
+  The UpdateView class renders the template with its name having
+  <var>
+   update_form
+  </var>
+  as suffix:
+ </p>
+ <pre language="python">#employee_update_form.html 
+&lt;form method="post"&gt; 
+{% csrf_token %} 
+&lt;table&gt; 
+    {{ form.as_table }} 
+&lt;/table&gt; 
+    &lt;input type="submit" value="Save"&gt; 
+&lt;/form&gt; </pre>
+ <h2 level="2" variant="h2semibold">
+  DeleteView
+ </h2>
+ <p variant="body1">
+  Lastly, the generic view performs thedelete operation on a model's given instance. It is present when editing the sub-module of
+  <var>
+   django.views.generic
+  </var>
+  module:
+ </p>
+ <pre language="python">from django.views.generic.edit import DeleteView 
+class EmployeeDelete(DeleteView):   
+    model = Employee   
+    success_url = "/employees/success/" </pre>
+ <p>
+  You need to pass the primary key of the Employee model to this. So, the URL path is set as:
+ </p>
+ <pre language="python">path('&lt;delete/int:pk&gt;', EmployeeDelete.as_view(), name = 'EmployeeDelete') </pre>
+ <p>
+  The
+  <var>
+   employee_confirm_delete.html
+  </var>
+  template asks for confirmation from the user before removing the model instance.
+ </p>
+ <pre language="python">&lt;form method="post"&gt; 
+{% csrf_token %}   
+
+    &lt;p&gt;Are you sure you want to delete "{{ object }}"?&lt;/p&gt;   
+
+    &lt;input type="submit" value="Confirm"&gt;   
+&lt;/form&gt; </pre>
+ <p>
+  In this reading, you got to know about the class-based generic views to perform CRUD operations. Generic views are much easier to write than the
+  <var>
+   function_based
+  </var>
+  view, although both have their own advantages and disadvantages.
+ </p>
+</co-content>
+<style>
+ body {
+    padding: 50px 85px 50px 85px;
+}
+
+table th, table td {
+    border: 1px solid #e0e0e0;
+    padding: 5px 20px;
+    text-align: left;
+}
+input {
+    margin: 10px;
+}
+}
+th {
+    font-weight: bold;
+}
+td, th {
+    display: table-cell;
+    vertical-align: inherit;
+}
+img {
+    height: auto;
+    max-width: 100%;
+}
+pre {
+    display: block;
+    margin: 20px;
+    background: #424242;
+    color: #fff;
+    font-size: 13px;
+    white-space: pre-wrap;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    border: 1px solid #ccc;
+}
+</style>
+<script async="" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+</script>
+<script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$$','$$'], ['$','$'] ],
+      displayMath: [ ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>

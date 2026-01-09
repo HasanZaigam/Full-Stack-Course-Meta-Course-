@@ -1,0 +1,642 @@
+<meta charset="utf-8"/>
+<co-content>
+ <p variant="body1">
+  In this reading, you will learn about different field types in a model class.
+ </p>
+ <h2 level="2" variant="h2semibold">
+  Model
+ </h2>
+ <p variant="body1">
+  A model in Django is like any normal Python class. The ORM layer maps this model to a database table in the Django project. Each attribute of a model class represents a field in the table.
+ </p>
+ <p variant="body1">
+  The Django ORM enables storing and retrieving data in tables, not by executing raw SQL queries, but by invoking the model methods.
+ </p>
+ <p variant="body1">
+  A model class subclasses the
+  <var>
+   django.models.Model
+  </var>
+  class. A typical definition of a model class is done inside the app's
+  <var>
+   models.py
+  </var>
+  file.
+ </p>
+ <pre language="python">from django.db import models  
+class Person(models.Model): 
+    first_name = models.CharField(max_length=20) 
+    last_name = models.CharField(max_length=20) </pre>
+ <p>
+  When you migrate this model (you need to include your app in the
+  <var>
+   INSTALLED_APPS
+  </var>
+  setting), the
+  <var>
+   myapp_person
+  </var>
+  table will be created as would be done by the
+  <var>
+   CREATE TABLE
+  </var>
+  query:
+ </p>
+ <pre language="python">CREATE TABLE Person ( 
+    id         INTEGER      PRIMARY KEY, 
+    first_name VARCHAR (20), 
+    last_name  VARCHAR (20)  
+) </pre>
+ <p variant="body1">
+  Note that the
+  <var>
+   first_name
+  </var>
+  and
+  <var>
+   last_name
+  </var>
+  are the class attributes corresponding to the fields in the table.
+ </p>
+ <p variant="body1">
+  Django automatically names the table as
+  <var>
+   appname_modelname
+  </var>
+  , which you can override by assigning the desired name to
+  <var>
+   db_table
+  </var>
+  parameter of the Meta class, to be declared inside the model class.
+ </p>
+ <pre language="python">class Student(CommonInfo): 
+    # ... 
+    class Meta(CommonInfo.Meta): 
+        db_table = 'student_info' </pre>
+ <p variant="body1">
+  You should choose the model field type appropriate for the data stored in the mapped field.
+ </p>
+ <p variant="body1">
+  The types are defined in
+  <var>
+   django.forms
+  </var>
+  module. The choice of type determines the HTML widget to use when the form field is rendered. For example, for a
+  <var>
+   CharField
+  </var>
+  , HTML's text input type will be used.
+ </p>
+ <p variant="body1">
+  Django also auto-creates the form based on model definitions (it is called
+  <var>
+   ModelForm
+  </var>
+  ), using field types.
+ </p>
+ <h2 level="2" variant="h2semibold">
+  Field properties
+ </h2>
+ <p variant="body1">
+  A Field object has common properties in addition to the field-specific properties.
+ </p>
+ <p variant="body1">
+  <var>
+   primary_key
+  </var>
+ </p>
+ <p variant="body1">
+  This parameter is False by default. You can set it to True if you want the mapped field in the table to be used as its primary key.
+ </p>
+ <p variant="body1">
+  It's not mandatory for the model to have a field with a primary key. In its absence, Django, on its own, creates an
+  <var>
+   IntegerField
+  </var>
+  to hold a unique auto-incrementing number.
+ </p>
+ <p variant="body1">
+  <var>
+   default
+  </var>
+ </p>
+ <p variant="body1">
+  You can also specify any default in the form of a value or a function that will be called when a new object is created.
+ </p>
+ <pre language="python">class Person(models.Model): 
+    name = models.CharField(max_length=50) 
+    address = models.CharField(max_length=80, default='Mumbai') </pre>
+ <p variant="body1">
+  <var>
+   unique
+  </var>
+ </p>
+ <p variant="body1">
+  If this parameter in the field definition is set to True, it will ensure that each object will have a unique value for this field.
+ </p>
+ <pre language="python">tax_code = models.CharField( 
+                    max_length = 20,   
+                    unique = True 
+                    ) </pre>
+ <p variant="body1">
+  <var>
+   choices
+  </var>
+ </p>
+ <p variant="body1">
+  If you want to create a drop-down from which the user should select a value for this field, set this parameter to a list of two-item tuples.
+ </p>
+ <pre language="python">SEMESTER_CHOICES = ( 
+    ("1", "Civil"), 
+    ("2", "Electrical"), 
+    ("3", "Mechanical"), 
+    ("4", "CompSci"), 
+) 
+ 
+# declaring a Student Model 
+
+class Student(models.Model): 
+      semester = models.CharField( 
+        max_length = 20, 
+        choices = SEMESTER_CHOICES, 
+        default = '1' 
+        ) </pre>
+ <p variant="body1">
+ </p>
+ <h2 level="2" variant="h2semibold">
+  Field types
+ </h2>
+ <p variant="body1">
+  The
+  <var>
+   django.models
+  </var>
+  module has many field types to choose from.
+ </p>
+ <p variant="body1">
+  <strong>
+   CharField:
+  </strong>
+ </p>
+ <p variant="body1">
+  This is the most used field type. It can hold string data of length specified by
+  <var>
+   max_lenth
+  </var>
+  parameter. For a longer string, use
+  <var>
+   TextField
+  </var>
+  .
+ </p>
+ <p variant="body1">
+  <strong>
+   IntegerField:
+  </strong>
+ </p>
+ <p variant="body1">
+  The field can store an integer between -2147483648 to 2147483647. There are
+  <var>
+   BigIntegerField
+  </var>
+  ,
+  <var>
+   SmallIntegerField
+  </var>
+  and
+  <var>
+   AutoField
+  </var>
+  types as well to store integers of varying lengths.
+ </p>
+ <p variant="body1">
+  <strong>
+   FloatField:
+  </strong>
+  It can store a floating-point number. Its variant
+  <var>
+   DecimalField
+  </var>
+  stores a number with fixed digits in the fractional part.
+ </p>
+ <pre language="python">class Student(Model): 
+    grade = models.DecimalField( 
+                         max_digits = 5, 
+                         decimal_places = 2) </pre>
+ <p variant="body1">
+  <strong>
+   DateTimeField
+  </strong>
+ </p>
+ <p variant="body1">
+  Stores the date and time as an object of Python's
+  <var>
+   datetime.datetime
+  </var>
+  class. The
+  <var>
+   DateField
+  </var>
+  stores
+  <var>
+   datetime.date
+  </var>
+  value.
+ </p>
+ <p variant="body1">
+  <strong>
+   EmailField
+  </strong>
+ </p>
+ <p variant="body1">
+  It’s actually a
+  <var>
+   CharField
+  </var>
+  with an in-built
+  <var>
+   EmailValidator
+  </var>
+ </p>
+ <p variant="body1">
+  <strong>
+   FileField
+  </strong>
+ </p>
+ <p variant="body1">
+  This field is used to save the file uploaded by the user to a designated path specified by the
+  <var>
+   upload_to
+  </var>
+  parameter.
+ </p>
+ <p variant="body1">
+  <strong>
+   ImageField
+  </strong>
+ </p>
+ <p variant="body1">
+  This is a variant of
+  <var>
+   FileField
+  </var>
+  , having the ability to validate if the uploaded file is an image.
+ </p>
+ <p variant="body1">
+  <strong>
+   URLField
+  </strong>
+ </p>
+ <p variant="body1">
+  A
+  <var>
+   CharField
+  </var>
+  having in-built validation for URL.
+ </p>
+ <p variant="body1">
+ </p>
+ <h2 level="2" variant="h2semibold">
+  Relationship fields
+ </h2>
+ <p variant="body1">
+  There can be three types of relationships between database models:
+ </p>
+ <ul bullettype="bullets">
+  <li aria-level="1" aria-posinset="1">
+   <p>
+    one-to-one
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="2">
+   <p>
+    one-to-many
+   </p>
+  </li>
+  <li aria-level="1" aria-posinset="3">
+   <p>
+    many-to-many
+   </p>
+  </li>
+ </ul>
+ <p variant="body1">
+  The
+  <strong>
+   django.models
+  </strong>
+  module has the following fields for establishing relationships between models.
+ </p>
+ <p variant="body1">
+  <var>
+   ForeignKey
+  </var>
+ </p>
+ <p variant="body1">
+  It is used to establisha
+  <strong>
+   one-to-many
+  </strong>
+  relationship between two models. It requires two positional arguments - the model with which it is related, and the
+  <var>
+   on_delete
+  </var>
+  option to define the behavior of the delete operation.
+ </p>
+ <p variant="body1">
+  Suppose you have a
+  <strong>
+   Customer
+  </strong>
+  and
+  <strong>
+   Vehicle
+  </strong>
+  model with a one-to-many relationship. A customer can have more than one vehicle.
+ </p>
+ <pre language="python">class Customer(models.Model): 
+    name = models.CharField(max_length=255) 
+
+class Vehicle(models.Model): 
+    name = models.CharField(max_length=255) 
+    customer = models.ForeignKey( 
+        Customer, 
+        on_delete=models.CASCADE, 
+        related_name='Vehicle' 
+    ) </pre>
+ <p variant="body1">
+  The
+  <var>
+   on_delete
+  </var>
+  option specifies the behavior in case the associated object in the primary model is deleted. The values are:
+ </p>
+ <p variant="body1">
+  <strong>
+   CASCADE
+  </strong>
+  : deletes the object containing the
+  <var>
+   ForeignKey
+  </var>
+ </p>
+ <p variant="body1">
+  <strong>
+   PROTECT
+  </strong>
+  : Prevent deletion of the referenced object
+ </p>
+ <p variant="body1">
+  <strong>
+   RESTRICT
+  </strong>
+  : Prevent deletion of the referenced object by raising
+  <var>
+   RestrictedError
+  </var>
+ </p>
+ <p variant="body1">
+ </p>
+ <p variant="body1">
+  Now let’s expand upon these values in more detail:
+ </p>
+ <h3 level="3" variant="h3bold">
+  CASCADE
+ </h3>
+ <p variant="body1">
+  If the
+  <var>
+   on_delete
+  </var>
+  parameter is set to
+  <var>
+   CASCADE
+  </var>
+  , deleting the reference object will also delete the referred object. Suppose a vehicle belongs to a customer. When the Customer is deleted, all the vehicles that reference the customer will be automatically deleted.
+ </p>
+ <h3 level="3" variant="h3bold">
+  <strong>
+   PROTECT
+  </strong>
+ </h3>
+ <p variant="body1">
+  The effect of the
+  <var>
+   PROTECT
+  </var>
+  option is the opposite of
+  <var>
+   CASCADE
+  </var>
+  . It prevents the deletion of a referenced objectif it has an object referencing it in the database. Suppose a vehicle belongs to a customer.
+ </p>
+ <p variant="body1">
+  If a customer has vehicles, it cannot be deleted. It’s important to know that if you forcefully delete the customer, Django raises the
+  <var>
+   ProtectedError
+  </var>
+  .
+ </p>
+ <h3 level="3" variant="h3bold">
+  RESTRICT
+ </h3>
+ <p variant="body1">
+  The difference between
+  <var>
+   PROTECT
+  </var>
+  and
+  <var>
+   RESTRICT
+  </var>
+  is that when you delete the referenced object, the
+  <var>
+   on_delete
+  </var>
+  option raises the
+  <var>
+   RestrictedError
+  </var>
+  .
+ </p>
+ <p variant="body1">
+  The deletion of the referenced object is allowed if it also references a different object that is being deleted in the same operation, but via a
+  <var>
+   CASCADE
+  </var>
+  relationship.
+ </p>
+ <p variant="body1">
+  Let’s use the example of an Artist model – a
+  <var>
+   CASCADE
+  </var>
+  relationship with an Album and Song model. The Artist model, in turn, has a
+  <var>
+   RESTRICT
+  </var>
+  relationship with the song model.
+ </p>
+ <pre language="python">class Artist(models.Model): 
+    name = models.CharField(max_length=10) 
+
+class Album(models.Model): 
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE) 
+
+class Song(models.Model): 
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE) 
+    album = models.ForeignKey(Album, on_delete=models.RESTRICT) </pre>
+ <p>
+  Next, you can create a few instances of these models:
+ </p>
+ <pre language="python">&gt;&gt;&gt; artist1 = Artist.objects.create(name='Danny') 
+&gt;&gt;&gt; artist2 = Artist.objects.create(name='John') 
+&gt;&gt;&gt; album1 = Album.objects.create(artist=artist1) 
+&gt;&gt;&gt; album2 = Album.objects.create(artist=artist2) 
+&gt;&gt;&gt; song1 = Song.objects.create(artist=artist1, album=album1) 
+&gt;&gt;&gt; song_two = Song.objects.create(artist=artis1, album=album2)</pre>
+ <p variant="body1">
+  You can safely delete the
+  <var>
+   artist1
+  </var>
+  instance. If you try to delete artist2, the
+  <var>
+   RestrictedError
+  </var>
+  is raised.
+ </p>
+ <h3 level="3" variant="h3bold">
+  <strong>
+   OneToOneField
+  </strong>
+  :
+ </h3>
+ <p variant="body1">
+  This field in one of the models establishes a one-to-one relationship between the two models.
+ </p>
+ <p variant="body1">
+  Although a
+  <var>
+   ForeignKey
+  </var>
+  field with
+  <var>
+   unique=True
+  </var>
+  setting, behaves similarly, the reverse side of the relationship will always return a single object.
+ </p>
+ <p variant="body1">
+  The following model definition demonstrates a one-to-one relationship between the
+  <strong>
+   college
+  </strong>
+  model and a
+  <strong>
+   principal
+  </strong>
+  model.
+ </p>
+ <p variant="body1">
+  A college can have only one principal and one person can be a principal of only one college.
+ </p>
+ <pre language="python">class college(Model): 
+    CollegeID = models.IntegerField(primary_key = True) 
+    name = models.CharField(max_length=50) 
+    strength = models.IntegerField() 
+    website=models.URLField() 
+
+class Principal(models.Model): 
+    CollegeID = models.OneToOneField( 
+                College, 
+                on_delete=models.CASCADE 
+                ) 
+    Qualification = models.CharField(max_length=50) 
+    email = models.EmailField(max_length=50) </pre>
+ <p variant="body1">
+  <strong>
+   ManyToManyField
+  </strong>
+  :
+ </p>
+ <p variant="body1">
+  This field helps in setting a many-to-many relationship between two models.
+ </p>
+ <p variant="body1">
+  Here, multiple objects of one model can be associated with multiple objects of another model.
+ </p>
+ <p variant="body1">
+  For example, in the case of
+  <strong>
+   Subject
+  </strong>
+  and
+  <strong>
+   Teacher
+  </strong>
+  models, a subject is taught by more than one teacher.
+ </p>
+ <p variant="body1">
+  Similarly, a teacher can teach more than one subject. This is represented in the following model definitions:
+ </p>
+ <pre language="python">class Teacher(models.Model): 
+    TeacherID = models.ItegerField(primary_key=True) 
+    Qualification = models.CharField(max_length=50) 
+    email = models.EmailField(max_length=50) 
+
+class Subject(models.Model): 
+    Subjectcode = models.IntegerField(primary_key = True) 
+    name = models.CharField(max_length=30) 
+    credits = model.IntegerField() 
+    teacher = model.ManyToManyField(Teacher) </pre>
+ <p>
+  In this reading you learned about the different fields to be used as the type of attributes in a model class.
+ </p>
+</co-content>
+<style>
+ body {
+    padding: 50px 85px 50px 85px;
+}
+
+table th, table td {
+    border: 1px solid #e0e0e0;
+    padding: 5px 20px;
+    text-align: left;
+}
+input {
+    margin: 10px;
+}
+}
+th {
+    font-weight: bold;
+}
+td, th {
+    display: table-cell;
+    vertical-align: inherit;
+}
+img {
+    height: auto;
+    max-width: 100%;
+}
+pre {
+    display: block;
+    margin: 20px;
+    background: #424242;
+    color: #fff;
+    font-size: 13px;
+    white-space: pre-wrap;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    border: 1px solid #ccc;
+}
+</style>
+<script async="" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+</script>
+<script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$$','$$'], ['$','$'] ],
+      displayMath: [ ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>

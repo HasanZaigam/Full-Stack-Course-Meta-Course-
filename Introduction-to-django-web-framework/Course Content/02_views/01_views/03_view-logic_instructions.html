@@ -1,0 +1,240 @@
+<meta charset="utf-8"/>
+<co-content>
+ <p>
+  The view plays a pivotal role in Django's MVT architecture. On one side, Django's URL dispatcher invokes a corresponding view function that matches the URL pattern.
+ </p>
+ <p>
+  On the other side, the view interacts with both the model and template layers.
+ </p>
+ <h2 level="2" variant="h2semibold">
+  What does the view do?
+ </h2>
+ <p>
+  The primary role of the view function is to fetch the data from the client's request, apply a certain processing logic to it and send an appropriate response back to the client.
+ </p>
+ <p>
+  It receives the request data in an object of  class
+  <var>
+   HttpRequest
+  </var>
+  .
+ </p>
+ <p>
+  For simplicity, you can say models are equivalent of a database in Django. The view function interacts with the model in either of two ways. It either fetches all or certain objects from the model such as the database table mapped with the model.
+ </p>
+ <p>
+  Or the request parameters are used to add a new instance of the model thereby inserting a new row in the mapped table.
+ </p>
+ <p>
+  The client uses the HTTP GET method to provide the data from the model or delete a certain instance. 
+On the other hand, it uses the POST method to indicate that the data in the request is to be used to perform an insert or update operation.
+ </p>
+ <p>
+  While you will learn about models soon, it is good to know the fundamentals. In the upcoming modules of this course, you’ll learn how to perform these model operations.
+ </p>
+ <h2 level="2" variant="h2semibold">
+  GET and POST methods
+ </h2>
+ <p>
+  Schematically, this behavior is implemented as below:
+ </p>
+ <pre language="python">from django.shortcuts import render  
+
+def myview(request):  
+
+    if request.method=='GET':  
+        #perform read or delete operation on the model  
+
+    if request.method=='POST':  
+        #perform insert or update operation on the model </pre>
+ <p>
+ </p>
+ <pre language="python">from django.shortcuts import render     
+
+def myview(request): 
+    if request.method=='GET': 
+        val = request.GET['key'] 
+        #perform read or delete operation on the model 
+    if request.method=='POST': 
+        val = request.POST['key'] 
+        #perform insert or update operation on the model </pre>
+ <p>
+  At the end of performing any process, you would want to let the user know about the result.
+ </p>
+ <p variant="body1">
+  The return value of the view function is a
+  <var>
+   HttpResponse
+  </var>
+  object containing the actual contents of default content_type as “
+  <var>
+   text/HTML
+  </var>
+  ” and the status code.
+ </p>
+ <p>
+  Additionally, it contains some header information. However, you would also want the view to give a well-formatted response.
+ </p>
+ <p>
+  Since the web browser is the client of your web application, the response should be in HTML format as a web page, called a web template.
+ </p>
+ <p>
+  The Django view loads the template web page, inserts certain context data at the placeholders marked with tags, and returns it as the response.
+ </p>
+ <h2 level="2" variant="h2semibold">
+  <strong>
+   View rendering template
+  </strong>
+ </h2>
+ <pre language="python">from django.shortcuts import render
+ 
+def myview(request):  
+
+      if request.method=='GET':  
+            #perform read or delete operation on the model  
+
+      if request.method=='POST':  
+            #perform insert or update operation on the model  
+            context={ } #dict containing data to be sent to the client  
+
+      return render(request, 'mytemplate.html', context) </pre>
+ <h2 level="2" variant="h2semibold">
+  <strong>
+   Class based views
+  </strong>
+ </h2>
+ <p>
+  In the above discussion,
+  <var>
+   myview
+  </var>
+  is a regular Python function.
+ </p>
+ <p>
+  Such views are called
+  <var>
+   function based views
+  </var>
+  . The processing logic in it is very imperative in nature, hence it may be repetitive.
+ </p>
+ <p>
+  Also, it uses conditional blocks for GET and POST requests. Django offers a more concise alternative in the form of a class-based view.
+ </p>
+ <p>
+  You create a sub-class of the View class and override its
+  <var>
+   get()
+  </var>
+  and
+  <var>
+   post()
+  </var>
+  methods to separately and cleanly define GET and POST operations.
+ </p>
+ <p>
+ </p>
+ <pre language="python">from django.views import View 
+class MyView(View): 
+    def get(self, request): 
+        # logic to process GET request
+        return HttpResponse('response to GET request') 
+ 
+    def post(self, request): 
+        # &lt;logic to process POST request&gt; 
+        return HttpResponse('response to POST request') </pre>
+ <h2 level="2" variant="h2semibold">
+  Generic views
+ </h2>
+ <p>
+  Django makes the view declaration process still easier with its generic class-based views. The
+  <var>
+   django.views.generic
+  </var>
+  module contains several view classes that provide the functionality required to perform tasks such as rendering a template, showing an instance, showing the list of instances, adding a new model instance, updating an instance and so on.
+ </p>
+ <p>
+  Some generic views are
+  <var>
+   TemplateView
+  </var>
+  ,
+  <var>
+   CreateView
+  </var>
+  ,
+  <var>
+   ListView
+  </var>
+  ,
+  <var>
+   DetailView
+  </var>
+  ,
+  <var>
+   UpdateView
+  </var>
+  to name a few.
+ </p>
+ <p>
+  You need to subclass the generic view and set the properties like
+  <var>
+   model
+  </var>
+  and
+  <var>
+   template_name
+  </var>
+  . Django will internally perform all the heavy lifting which you had to do by yourself in a function-based view.
+ </p>
+ <p>
+  You will be working with the class based views in a later module of this course. As this is an introductory course, understanding the fundamentals of building views is important with the function based views. Class based views and Generic views are however widely used and an important topic to be understood as you progress with your journey in web development.
+ </p>
+</co-content>
+<style>
+ body {
+    padding: 50px 85px 50px 85px;
+}
+
+table th, table td {
+    border: 1px solid #e0e0e0;
+    padding: 5px 20px;
+    text-align: left;
+}
+input {
+    margin: 10px;
+}
+}
+th {
+    font-weight: bold;
+}
+td, th {
+    display: table-cell;
+    vertical-align: inherit;
+}
+img {
+    height: auto;
+    max-width: 100%;
+}
+pre {
+    display: block;
+    margin: 20px;
+    background: #424242;
+    color: #fff;
+    font-size: 13px;
+    white-space: pre-wrap;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    border: 1px solid #ccc;
+}
+</style>
+<script async="" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+</script>
+<script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$$','$$'], ['$','$'] ],
+      displayMath: [ ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>

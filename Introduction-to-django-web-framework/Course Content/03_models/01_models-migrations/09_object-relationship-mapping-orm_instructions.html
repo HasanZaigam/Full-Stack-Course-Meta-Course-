@@ -1,0 +1,301 @@
+<meta charset="utf-8"/>
+<co-content>
+ <h2 level="2" variant="h2semibold">
+  What is ORM
+  <strong>
+  </strong>
+ </h2>
+ <p variant="body1">
+  Usually, the type of system used in an Object-Oriented language such as Python contains types that are non-scalar and every time, they cannot be represented only in primitive types such as integers and strings.
+ </p>
+ <p variant="body1">
+  On the other hand, data types in tables of a relational database are of primary types, that is integer and string.
+ </p>
+ <p variant="body1">
+  Therefore, the program needs to convert objects in scalar data to interact with a backend database.
+ </p>
+ <p variant="body1">
+  Object-oriented programming languages use Object Relation Mapping (ORM) to interact with Structured Query Language (SQL), both of which are incompatible.
+ </p>
+ <p variant="body1">
+  The ORM layer maps a class to a table in a relational database, with its attributes matching the table's field structure.
+ </p>
+ <p variant="body1">
+  The ORM library lets you perform the database operations in an object-oriented way instead of executing raw SQL queries.
+ </p>
+ <p variant="body1">
+  This allows you to focus more on the programming logic than the backend database operations.
+ </p>
+ <p variant="body1">
+  Object Relational Mapping or ORM is the ability to create a SQL query using object-oriented programming language such as Python. This enables a quick turnaround time in fast production environments that need constant updates.
+ </p>
+ <p variant="body1">
+  Each model is a Python class that subclasses
+  <var>
+   django.db.models.Model
+  </var>
+ </p>
+ <p variant="body1">
+  Each attribute of the model represents a database field. Essentially you can think of a model as a Python object, and models help developers create, read, update and delete objects, commonly called the CRUD operations.
+ </p>
+ <p variant="body1">
+  Django has its own ORM layer. Its migration mechanism propagates the models in database tables.
+ </p>
+ <p variant="body1">
+  You need to construct a
+  <var>
+   QuerySet
+  </var>
+  via a Manager of your model class to retrieve objects from your database.
+ </p>
+ <h2 level="2" variant="h2semibold">
+  QuerySet
+ </h2>
+ <p variant="body1">
+  Let's try to understand how
+  <var>
+   QuerySet
+  </var>
+  is constructed and handled with an example. To begin with, add the following models in the Django app named
+  <var>
+   demoapp
+  </var>
+  .
+ </p>
+ <pre language="python">from django.db import models  
+class Customer(models.Model): 
+    name = models.CharField(max_length=255) 
+
+class Vehicle(models.Model): 
+    name = models.CharField(max_length=255) 
+    customer = models.ForeignKey( 
+        Customer, 
+        on_delete=models.CASCADE, 
+        related_name='Vehicle' 
+    ) </pre>
+ <p variant="body1">
+  The idea is to create two tables, Customer and Vehicle, with a one-to-many relationship. Apply the migrations and you will see these two tables in the project's database.
+ </p>
+ <p variant="body1">
+  Next, open the Interactive shell.
+ </p>
+ <p variant="body1">
+  It is important to know that these commands are the same if you are on Windows or Mac.
+ </p>
+ <h2 level="2" variant="h2semibold">
+  (djenv) C:\djenv\demoproject&gt;python manage.py shell
+ </h2>
+ <p variant="body1">
+  Create an object of the Customer class. Give a string parameter to the constructor. The
+  <var>
+   save()
+  </var>
+  method of the
+  <var>
+   models.Model
+  </var>
+  class creates a row in the Customer table.
+ </p>
+ <pre language="python">&gt;&gt;&gt; from demoapp.models import Customer 
+&gt;&gt;&gt; c=Customer(name="Henry") 
+&gt;&gt;&gt; c.save() </pre>
+ <p>
+ </p>
+ <h2 level="2" variant="h2semibold">
+  Adding a model object
+ </h2>
+ <p variant="body1">
+  The
+  <var>
+   Customer.objects
+  </var>
+  gives the Manager of the model. It handles all the CRUD operations on the database table. For example, an object can also be created with the
+  <var>
+   create()
+  </var>
+  method as follows:
+ </p>
+ <pre language="python">&gt;&gt;&gt; Customer.objects.create(name="Hameed") 
+&lt;Customer: Customer object (2)&gt; </pre>
+ <p variant="body1">
+  The
+  <var>
+   create()
+  </var>
+  method actually performs the
+  <var>
+   INSERT
+  </var>
+  operation of SQL.
+ </p>
+ <p variant="body1">
+  Now, let us add two objects to the Vehicle model. Note that one of the fields in the Vehicle model refers to an object of the Customer table as
+  <var>
+   ForeignKey
+  </var>
+  . Fetch the Customer object with a primary key = 2.
+ </p>
+ <pre language="python">&gt;&gt;&gt; from demoapp.models import Customer, Vehicle  
+&gt;&gt;&gt; c=Customer.objects.get(pk=2) 
+&gt;&gt;&gt; c.name 
+'Hameed' </pre>
+ <p>
+  This object is used as the value of the customer attribute in the Vehicle object.
+ </p>
+ <pre language="python">&gt;&gt;&gt; v=Vehicle(name="Honda", customer=c) 
+&gt;&gt;&gt; v.save() 
+&gt;&gt;&gt; v=Vehicle(name="Toyota", customer=c)   
+&gt;&gt;&gt; v.save() </pre>
+ <p>
+  Similarly, add two vehicles for Customer "Henry".
+ </p>
+ <pre language="python">&gt;&gt;&gt; c=Customer.objects.get(name="Henry") 
+&gt;&gt;&gt; Vehicle.objects.create(name="Ford", customer=c) 
+&lt;Vehicle: Vehicle object (3)&gt; 
+&gt;&gt;&gt; Vehicle.objects.create(name="Nissan", customer=c) 
+&lt;Vehicle: Vehicle object (4)&gt; </pre>
+ <p>
+ </p>
+ <h2 level="2" variant="h2semibold">
+  Fetch model objects
+ </h2>
+ <p variant="body1">
+  A
+  <var>
+   QuerySet
+  </var>
+  represents a collection of objects from your database. It represents a
+  <var>
+   SELECT
+  </var>
+  query. To fetch all the objects, use the
+  <var>
+   all()
+  </var>
+  method of the Manager.
+ </p>
+ <pre language="python">model.objects.all()</pre>
+ <p>
+  The
+  <var>
+   all()
+  </var>
+  method returns a list of objects. You can iterate over it with the usual for loop or list comprehension technique.
+ </p>
+ <pre language="python">&gt;&gt; lst=Customer.objects.all()  
+&gt;&gt;&gt; [c.name for c in lst] 
+['Henry', 'Hameed'] </pre>
+ <p>
+  You can apply filters to the data fetched from the model. This is used to fetch objects satisfying the given criteria. In SQL terms, a
+  <var>
+   QuerySet
+  </var>
+  equates to a
+  <var>
+   SELECT
+  </var>
+  statement, it is like applying a
+  <var>
+   WHERE
+  </var>
+  clause.
+ </p>
+ <pre language="python">model.objects.filter(criteria) </pre>
+ <p>
+  For example, use the following statement to retrieve all the customers with names starting with '
+  <var>
+   H
+  </var>
+  '.
+ </p>
+ <pre language="python">mydata = Customer.objects.filter(name__startswith='H') </pre>
+ <p>
+  Similarly, you can retrieve the objects of the Vehicle model. Remember that the Vehicle object refers to a customer object. You can retrieve the attributes of the related customer as follows:
+ </p>
+ <pre language="python">&gt;&gt;&gt; lst=Vehicle.objects.all() 
+&gt;&gt;&gt; for v in lst: 
+...     print (v.name, " : ", v.customer.name) 
+...  
+Honda :  Hameed 
+Toyota :  Hameed 
+Ford :  Henry 
+Nissan :  Henry </pre>
+ <p>
+ </p>
+ <h2 level="2" variant="h2semibold">
+  Updating and removing a model object
+ </h2>
+ <p variant="body1">
+  To update an object, such as changing the Customer's name from Henry to Helen, assign a new value to the name attribute and save.
+ </p>
+ <pre language="python">&gt;&gt;&gt; c=Customer.objects.get(name="Henry") 
+&gt;&gt;&gt; c.name="Helen" 
+&gt;&gt;&gt; c.save() </pre>
+ <p>
+  Similarly, the
+  <var>
+   delete()
+  </var>
+  method of the model manager physically removes the corresponding row in the model's mapped table.
+ </p>
+ <pre language="python">&gt;&gt;&gt; c=Customer.objects.get(pk=4) 
+&gt;&gt;&gt; c.delete() 
+(1, {'demoapp.Customer': 1}) </pre>
+ <p>
+  This way, you can perform the CRUD operations on a database table using the
+  <var>
+   QuerySet
+  </var>
+  API instead of executing raw SQL queries.
+ </p>
+ <p>
+ </p>
+</co-content>
+<style>
+ body {
+    padding: 50px 85px 50px 85px;
+}
+
+table th, table td {
+    border: 1px solid #e0e0e0;
+    padding: 5px 20px;
+    text-align: left;
+}
+input {
+    margin: 10px;
+}
+}
+th {
+    font-weight: bold;
+}
+td, th {
+    display: table-cell;
+    vertical-align: inherit;
+}
+img {
+    height: auto;
+    max-width: 100%;
+}
+pre {
+    display: block;
+    margin: 20px;
+    background: #424242;
+    color: #fff;
+    font-size: 13px;
+    white-space: pre-wrap;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    border: 1px solid #ccc;
+}
+</style>
+<script async="" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+</script>
+<script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$$','$$'], ['$','$'] ],
+      displayMath: [ ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
