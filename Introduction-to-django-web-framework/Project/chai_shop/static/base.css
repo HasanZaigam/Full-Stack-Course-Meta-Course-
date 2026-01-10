@@ -1,0 +1,127 @@
+/* =========================
+   Global Reset & Variables
+   ========================= */
+
+:root {
+    --primary-color: #6f4e37;      /* Chai brown */
+    --secondary-color: #c19a6b;    /* Milk tea */
+    --accent-color: #f4d03f;       /* Saffron */
+    --bg-color: #faf7f2;
+    --text-color: #2c2c2c;
+    --white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* =========================
+   Base Styling
+   ========================= */
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Utility */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* =========================
+   Navbar
+   ========================= */
+
+.navbar {
+    background-color: var(--white);
+    border-bottom: 1px solid #e5e5e5;
+    padding: 15px 0;
+}
+
+.nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--primary-color);
+}
+
+/* =========================
+   Main Content
+   ========================= */
+
+.main-content {
+    padding: 40px 0;
+    min-height: calc(100vh - 160px);
+}
+
+/* =========================
+   Footer
+   ========================= */
+
+.footer {
+    background-color: var(--white);
+    border-top: 1px solid #e5e5e5;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 0.9rem;
+}
+
+/* =========================
+   Buttons (Global)
+   ========================= */
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: var(--secondary-color);
+}
+
+/* =========================
+   Cards (Reusable)
+   ========================= */
+
+.card {
+    background-color: var(--white);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
