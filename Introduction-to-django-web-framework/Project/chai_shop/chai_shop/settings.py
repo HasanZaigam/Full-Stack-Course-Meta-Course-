@@ -37,8 +37,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'home'
+    'home',
+    'tailwind',
+    'theme'  
 ]
+
+TAILWIND_APP_NAME = "theme"
+
+if DEBUG:
+    # Add django_browser_reload only in DEBUG mode
+    INSTALLED_APPS += ["django_browser_reload"]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -50,6 +58,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+if DEBUG:
+    # Add django_browser_reload middleware only in DEBUG mode
+    MIDDLEWARE += [
+        "django_browser_reload.middleware.BrowserReloadMiddleware",
+    ]
+    
 ROOT_URLCONF = 'chai_shop.urls'
 
 TEMPLATES = [

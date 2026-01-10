@@ -1,4 +1,5 @@
-{% load static %}
+{% load static tailwind_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,36 +19,75 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     {% block extra_css %}{% endblock %}
+    {% tailwind_css %}
 </head>
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container nav-wrapper">
-            <a href="/" class="logo">☕ ChaiShop</a>
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
 
-            <ul class="nav-links">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Chai Menu</a></li>
-                <li><a href="#">Cart</a></li>
-                <li><a href="#">Login</a></li>
-            </ul>
+                <!-- Logo -->
+                <a href="/" class="flex items-center space-x-2">
+                    <span class="text-2xl">☕</span>
+                    <span class="text-xl font-semibold text-gray-800">
+                        ChaiShop
+                    </span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="" class="text-gray-700 hover:text-brown-600 font-medium">
+                        Home
+                    </a>
+                    <a href="#" class="text-gray-700 hover:text-brown-600 font-medium">
+                        Chai Menu
+                    </a>
+                    <a href="#" class="text-gray-700 hover:text-brown-600 font-medium">
+                        Cart
+                    </a>
+                </div>
+
+                <!-- Auth Button -->
+                <div class="hidden md:flex">
+                    <a href="#"
+                    class="px-4 py-2 rounded-lg bg-amber-600 text-white font-medium hover:bg-amber-700 transition">
+                        Login
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-gray-700 focus:outline-none">
+                    ☰
+                </button>
+
+            </div>
         </div>
     </nav>
 
+
     <!-- Main Content -->
-    <main class="main-content container">
+    <main class="max-w-7xl mx-auto px-4 py-10 min-h-screen">
         {% block content %}
         <!-- Page-specific content goes here -->
         {% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>© 2026 ChaiShop | Brewed with ❤️ in India</p>
+
+    <footer class="bg-gray-50 border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+
+                <!-- Copyright -->
+                <p class="ttext-sm text-gray-500 text-center w-full">
+                    © 2026 ChaiShop · Brewed with <span class="text-red-500">❤️</span> in India
+                </p>
+            </div>
         </div>
     </footer>
+
 
     {% block extra_js %}{% endblock %}
 </body>
