@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Store, ChaiVariety, ChaiSize, StoreChai
+from .models import Store, ChaiVariety, ChaiSize, StoreChai, Ingredients
 
 class StoreChaiInline(admin.TabularInline):
     model = StoreChai
@@ -23,6 +23,7 @@ class ChaiVarietyAdmin(admin.ModelAdmin):
     list_display = ('name','is_seasonal', 'created_at')
     list_filter = ('is_seasonal',)
     search_filter = ('name',)
+    filter_horizontal = ('ingredients',)
 
 @admin.register(ChaiSize)
 class ChaiSizeAdmin(admin.ModelAdmin):
@@ -42,3 +43,8 @@ class StoreChaiAdmin(admin.ModelAdmin):
     'store__name',          # search by related Store name
     'chai_variety__name',   # search by related ChaiVariety name
     )
+
+
+@admin.register(Ingredients)
+class IngredientsAdmin(admin.ModelAdmin):
+    search_fields = ('name',)

@@ -24,7 +24,7 @@ class Ingredients(models.Model):
 class ChaiVariety(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    ingridents = models.ManyToManyField(
+    ingredients = models.ManyToManyField(
         Ingredients,
         related_name = 'chai_varieties' 
     )
