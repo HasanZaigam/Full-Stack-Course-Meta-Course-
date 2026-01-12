@@ -34,19 +34,19 @@ class ChaiVariety(models.Model):
     def __str__(self):
         return self.name
 
-# Created the ChaiSizes table for different chai sizes.
-class ChaiSizes(models.Model):
+# Created the ChaiSize table for different chai sizes.
+class ChaiSize(models.Model):
     name = models.CharField(max_length=100)
-    voulme_ml = models.PositiveIntegerField()
+    volume_ml = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"{self.name} ({self.voulme_ml}ml)"
+        return f"{self.name} ({self.volume_ml}ml)"
 
 # Created the main table StoreChai, it links all the table.
 class StoreChai(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     chai_variety = models.ForeignKey(ChaiVariety, on_delete=models.CASCADE)
-    size = models.ForeignKey(ChaiSizes, on_delete=models.CASCADE)
+    size = models.ForeignKey(ChaiSize, on_delete=models.CASCADE)
 
     price = models.DecimalField(max_digits=6, decimal_places=2)
     is_available = models.BooleanField(default=True)
